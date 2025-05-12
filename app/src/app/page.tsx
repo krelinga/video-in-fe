@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function Home() {
   const transport = createConnectTransport({
-        baseUrl: "http://zealous_sanderson:25004", // Replace with your server URL
+        baseUrl: "http://kind_lovelace:25004", // Replace with your server URL
         // Add any additional transport options here
       });
   const client = createClient(Service, transport);
