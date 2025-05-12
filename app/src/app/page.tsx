@@ -19,7 +19,7 @@ export default function Home() {
         placeholder="Type something and press Enter"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyUp={handleKeyPress}
       />
     </div>
   );
