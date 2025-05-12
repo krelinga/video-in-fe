@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@buf/krelinga_proto.bufbuild_es": "^2.3.0-20250512135634-96ef563906bf.1",
+    "@buf/krelinga_proto.bufbuild_es": "^2.3.0-20250512161936-f2d0e8207bcf.1",
     "@connectrpc/connect": "^2.0.0",
     "@connectrpc/connect-web": "^2.0.2",
     "next": "15.3.2",
