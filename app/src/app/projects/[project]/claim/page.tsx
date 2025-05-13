@@ -1,20 +1,23 @@
 "use client";
 
+import { use } from 'react';
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from 'react';
 
 export default function ClaimDiscs({
     params
 }: {
-    params: {
+    params: Promise<{
         project: string;
-}}) {
+}>}) {
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<string[] | null >(null);
     const router = useRouter(); // Initialize the router
 
+    const { project } = use(params);
+
     const load = async () => {
-        const response = await fetch('/projects/' + params.project + '/claim/data', {
+        const response = await fetch('/projects/' + project + '/claim/data', {
             method: 'GET',
             cache: 'no-store',
         });
@@ -33,7 +36,7 @@ export default function ClaimDiscs({
             console.log(key, value);
         }
 
-        const response = await fetch('/projects/' + params.project + '/claim/data', {
+        const response = await fetch('/projects/' + project + '/claim/data', {
             method: 'POST',
             body: formData,
         });
@@ -49,7 +52,7 @@ export default function ClaimDiscs({
     }, []);
     return (
         <main>
-            <div>{params.project}</div>
+            <div>{project}</div>
             <form onSubmit={submit}>
                 {data && data.map((item) => (
                     <div key={item}>
