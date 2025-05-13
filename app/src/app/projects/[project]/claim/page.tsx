@@ -27,6 +27,9 @@ export default function ClaimDiscs({
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         console.log(formData)
+        for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
     }
     useEffect(() => {
         load()
