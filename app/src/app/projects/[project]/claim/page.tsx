@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from 'react';
 
 export default function ClaimDiscs({
@@ -10,6 +11,7 @@ export default function ClaimDiscs({
 }}) {
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<string[] | null >(null);
+    const router = useRouter(); // Initialize the router
 
     const load = async () => {
         const response = await fetch('/projects/' + params.project + '/claim/data', {
@@ -29,6 +31,17 @@ export default function ClaimDiscs({
         console.log(formData)
         for (const [key, value] of formData.entries()) {
             console.log(key, value);
+        }
+
+        const response = await fetch('/projects/' + params.project + '/claim/data', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            setError(data.error || 'An unexpected error occurred.');
+        } else {
+            router.push('/'); // Redirect to the home page
         }
     }
     useEffect(() => {
