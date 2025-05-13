@@ -4,6 +4,22 @@ import { use } from 'react';
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from 'react';
 
+async function load(
+    project: string,
+    setError: React.Dispatch<React.SetStateAction<string | null>>,
+    setData: React.Dispatch<React.SetStateAction<string[] | null>>) {
+    const response = await fetch('/projects/' + project + '/claim/data', {
+        method: 'GET',
+        cache: 'no-store',
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        setError(data.error || 'An unexpected error occurred.');
+    } else {
+        setData(data.dirs);
+    }
+}
+
 export default function ClaimDiscs({
     params
 }: {
@@ -15,19 +31,6 @@ export default function ClaimDiscs({
     const router = useRouter(); // Initialize the router
 
     const { project } = use(params);
-
-    const load = async () => {
-        const response = await fetch('/projects/' + project + '/claim/data', {
-            method: 'GET',
-            cache: 'no-store',
-        });
-        const data = await response.json();
-        if (!response.ok) {
-            setError(data.error || 'An unexpected error occurred.');
-        } else {
-            setData(data.dirs);
-        }
-    }
     const submit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -48,8 +51,8 @@ export default function ClaimDiscs({
         }
     }
     useEffect(() => {
-        load()
-    }, []);
+        load(project, setError, setData);
+    }, [project]);
     return (
         <main>
             <div>{project}</div>
