@@ -5,7 +5,6 @@ import { ConnectError } from '@connectrpc/connect';
 export async function POST(req: NextRequest) {
   const data = await req.formData();
   const name = data.get('name') as string;
-  console.log("got here")
 
   try {
     const client = createClient();
