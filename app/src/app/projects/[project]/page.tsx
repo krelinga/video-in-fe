@@ -9,6 +9,10 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
     const [error, setError] = useState<string | null>(null);
     const [data, setData] = useState<ProjectDisc[] | null>(null);
 
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    }
+
     useEffect(() => {
         const load = async() => {
             const response = await fetch('/projects/' + project + '/data', {
@@ -30,11 +34,16 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
         <main>
             <h1>Project: {project}</h1>
             {error && <div>Error: {error}</div>}
+            <form onSubmit={onSubmit}>
             {data && data.map((item) => (
                 <div key={item.disc}>
                     <h2>Disc: {item.disc}</h2>
+                    {item.thumbs.map((thumb) => (
+                        <div key={thumb}>{thumb}</div>
+                    ))}
                 </div>
             ))}
+            </form>
         </main>
     );
 };
