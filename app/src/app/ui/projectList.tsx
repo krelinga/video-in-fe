@@ -10,6 +10,9 @@ export default function ProjectList({ projects }: { projects: ProjectListRespons
                     <li key={index} className="mb-2">
                         <div className="flex flex-col items-start">
                             <span className="font-semibold">{name}</span>
+                            <Link href={`/projects/${name}/claim`} className="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                Claim Discs
+                            </Link>
                         </div>
                     </li>
                 ))}
