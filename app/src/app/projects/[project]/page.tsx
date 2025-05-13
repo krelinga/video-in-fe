@@ -1,10 +1,12 @@
-import React from 'react';
+"use client";
 
-export default function ProjectPage() {
+import { use } from 'react';
+
+export default function ProjectPage({ params }: { params: Promise<{ project: string }> }) {
+    const { project } = use(params);
     return (
         <div>
-            <h1>Hello, World!</h1>
-            <p>Welcome to the project page.</p>
+            <h1>Project: {project}</h1>
         </div>
     );
 };
