@@ -42,7 +42,19 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
                     {item.discFiles.map((discFile) => (
                         <div key={discFile.file}>
                             <div>File: {discFile.file}</div>
-                            <div>Category: {discFile.category}</div>
+                            <label>
+                                Category:
+                                <select 
+                                    id={`${item.disc}/${discFile.file}`} 
+                                    name={`${item.disc}/${discFile.file}`} 
+                                    defaultValue={discFile.category}
+                                >
+                                    <option value=""></option>
+                                    <option value="main_title">Main Title</option>
+                                    <option value="extra">Extra</option>
+                                    <option value="trash">Trash</option>
+                                </select>
+                            </label>
                             <img src={`http://localhost:25004/thumbs/${project}/${item.disc}/${discFile.thumb}`} alt="Thumbnail" />
                         </div>
                     ))}
