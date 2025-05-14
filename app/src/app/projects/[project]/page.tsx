@@ -42,6 +42,7 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
                     {item.discFiles.map((discFile) => (
                         <div key={discFile.file}>
                             <div>File: {discFile.file}</div>
+                            <div>Category: {discFile.category}</div>
                             <img src={`http://localhost:25004/thumbs/${project}/${item.disc}/${discFile.thumb}`} alt="Thumbnail" />
                         </div>
                     ))}
