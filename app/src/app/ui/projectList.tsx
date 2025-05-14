@@ -16,6 +16,9 @@ export default function ProjectList({ projects }: { projects: ProjectListRespons
                             <Link href={`/projects/${name}/claim`} className="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                                 Claim Discs
                             </Link>
+                            <Link href={`/projects/${name}/meta`} className="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                Set Metadata
+                            </Link>
                         </div>
                     </li>
                 ))}
