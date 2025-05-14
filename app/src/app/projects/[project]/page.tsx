@@ -11,6 +11,22 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const response = await fetch('/projects/' + project + '/data', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            setError(data.error || 'An unexpected error occurred.');
+        }
+        else {
+            setError("Saved successfully");
+            setTimeout(() => {
+                setError(null);
+            }
+            , 2000);
+        }
     }
 
     useEffect(() => {
@@ -60,6 +76,7 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
                     ))}
                 </div>
             ))}
+                <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Save</button>
             </form>
         </main>
     );
