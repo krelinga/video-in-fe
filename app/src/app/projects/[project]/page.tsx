@@ -38,8 +38,12 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
             {data && data.map((item) => (
                 <div key={item.disc}>
                     <h2>Disc: {item.disc}</h2>
-                    {item.thumbs.map((thumb) => (
-                        <div key={thumb}>{thumb}</div>
+                    <div>Thumb State: {item.thumbState}</div>
+                    {item.discFiles.map((discFile) => (
+                        <div key={discFile.file}>
+                            <div>File: {discFile.file}</div>
+                            <div>Thumb: {discFile.thumb}</div>
+                        </div>
                     ))}
                 </div>
             ))}
