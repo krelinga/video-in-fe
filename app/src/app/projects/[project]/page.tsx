@@ -48,22 +48,23 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
 
     return (
         <main>
-            <h1>Project: {project}</h1>
-            {error && <div>Error: {error}</div>}
-            <form onSubmit={onSubmit}>
+            <h1 className="text-2xl font-bold mb-4">Project: {project}</h1>
+            {error && <div className="text-red-500 mb-4">Error: {error}</div>}
+            <form onSubmit={onSubmit} className="space-y-6">
             {data && data.map((item) => (
-                <div key={item.disc}>
-                    <h2>Disc: {item.disc}</h2>
-                    <div>Thumb State: {item.thumbState}</div>
+                <div key={item.disc} className="border p-4 rounded shadow-md">
+                    <h2 className="text-xl font-semibold mb-2">Disc: {item.disc}</h2>
+                    <div className="text-gray-700 mb-4">Thumb State: {item.thumbState}</div>
                     {item.discFiles.map((discFile) => (
-                        <div key={discFile.file}>
-                            <div>File: {discFile.file}</div>
-                            <label>
-                                Category:
+                        <div key={discFile.file} className="mb-4">
+                            <div className="text-gray-800 font-medium">File: {discFile.file}</div>
+                            <label className="block mt-2">
+                                <span className="text-gray-600">Category:</span>
                                 <select 
                                     id={`${item.disc}/${discFile.file}`} 
                                     name={`${item.disc}/${discFile.file}`} 
                                     defaultValue={discFile.category}
+                                    className="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
                                 >
                                     <option value=""></option>
                                     <option value="main_title">Main Title</option>
@@ -71,12 +72,22 @@ export default function ProjectPage({ params }: { params: Promise<{ project: str
                                     <option value="trash">Trash</option>
                                 </select>
                             </label>
-                            <img src={`http://localhost:25004/thumbs/${project}/${item.disc}/${discFile.thumb}`} alt="Thumbnail" />
+                            <img 
+                                src={`http://localhost:25004/thumbs/${project}/${item.disc}/${discFile.thumb}`} 
+                                alt="Thumbnail" 
+                                className="mt-4 w-32 h-32 object-cover border rounded"
+                            />
                         </div>
                     ))}
                 </div>
             ))}
-                <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Save</button>
+                <button 
+                    type="submit" 
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Save
+                </button>
+
             </form>
         </main>
     );
