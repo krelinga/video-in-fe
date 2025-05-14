@@ -84,7 +84,7 @@ export default function SetMetadataPage({
 
             </form>
             {searcResults && (
-                <div>
+                <form onSubmit={onSetMetadata}>
                     <select
                         id="tmdbId"
                         name="tmdbId"
@@ -97,13 +97,14 @@ export default function SetMetadataPage({
                             </option>
                         ))}
                     </select>
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">Set Metadata</button>
                     {resultDisplay && (
                         <div>
                             <p>{resultDisplay.overview}</p>
                             <img src={resultDisplay.posterUrl} alt={resultDisplay.title} />
                         </div>
                     )}
-                </div>
+                </form>
             )}
         </main>
     )
