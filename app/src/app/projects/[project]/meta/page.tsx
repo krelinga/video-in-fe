@@ -3,6 +3,8 @@
 import { use } from 'react';
 import { useState, useEffect } from 'react';
 import { MovieSearchResponse, MovieSearchResult } from '@buf/krelinga_proto.bufbuild_es/krelinga/video/in/v1/service_pb';
+import { useRouter } from "next/navigation";
+
 
 function getFirstId(searchResults: MovieSearchResponse): string | undefined {
     if (searchResults.results.length > 0) {
@@ -37,6 +39,7 @@ export default function SetMetadataPage({
     const [searcResults, setSearchResults] = useState<MovieSearchResponse | null>(null);
     const [resultDisplay, setResultDisplay] = useState<MovieSearchResult | null>(null);
     const { project } = use(params);
+    const router = useRouter(); // Initialize the router
 
     const onSearch = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -62,6 +65,17 @@ export default function SetMetadataPage({
 
     const onSetMetadata = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const response = await fetch('/projects/' + project + '/meta/data', {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            setError(data.error || 'An unexpected error occurred.');
+        } else {
+            router.push('/'); // Redirect to the home page
+        }
     }
 
     const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
