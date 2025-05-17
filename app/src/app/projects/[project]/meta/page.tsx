@@ -86,6 +86,29 @@ export default function SetMetadataPage({
         }
     }
 
+    useEffect(() => {
+        const load = async () => {
+            const response = await fetch('/projects/' + project + '/meta/data', {
+                method: 'GET',
+                cache: 'no-store',
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                setError(data.error || 'An unexpected error occurred.');
+            } else {
+                const firstId = getFirstId(data);
+                if (firstId) {
+                    const result = findById(data, firstId);
+                    if (result) {
+                        setResultDisplay(result);
+                    }
+                }
+                setSearchResults(data);
+            }
+        }
+        load();
+    }, [project]);
+
     return (
         <main>
             <h1 className="text-2xl font-bold mb-4">Set Metadata for {project}</h1>
