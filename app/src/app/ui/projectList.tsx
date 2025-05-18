@@ -1,7 +1,13 @@
+"use client";
+
 import { ProjectListResponse } from '@buf/krelinga_proto.bufbuild_es/krelinga/video/in/v1/service_pb'
 import Link from 'next/link'
+import React from 'react';
 
 export default function ProjectList({ projects }: { projects: ProjectListResponse }) {
+    const handleAbandonClick = async (project: string) => {
+        console.log('Abandon button clicked', project);
+    };
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8">
             <h1 className="text-2xl font-bold mb-4">Project List</h1>
@@ -19,6 +25,9 @@ export default function ProjectList({ projects }: { projects: ProjectListRespons
                             <Link href={`/projects/${name}/meta`} className="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                                 Set Metadata
                             </Link>
+                            <button onClick={async () => {handleAbandonClick(name)}} className="mt-1 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                                Abandon
+                            </button>
                         </div>
                     </li>
                 ))}
