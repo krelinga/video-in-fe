@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { ProjectDisc } from '@buf/krelinga_proto.bufbuild_es/krelinga/video/in/v1/service_pb';
+import Image from 'next/image';
 
 export default function FileCategorize({ project, imgUrlPrefix }: { project: string, imgUrlPrefix: string, }) {
     const [error, setError] = useState<string | null>(null);
@@ -70,7 +71,7 @@ export default function FileCategorize({ project, imgUrlPrefix }: { project: str
                                     <option value="trash">Trash</option>
                                 </select>
                             </label>
-                            <img 
+                            <Image
                                 src={`${imgUrlPrefix}/thumbs/${project}/${item.disc}/${discFile.thumb}`} 
                                 alt="Thumbnail" 
                                 className="mt-4 w-32 h-32 object-cover border rounded"

@@ -4,7 +4,7 @@ import { use } from 'react';
 import { useState, useEffect } from 'react';
 import { MovieSearchResponse, MovieSearchResult } from '@buf/krelinga_proto.bufbuild_es/krelinga/video/in/v1/service_pb';
 import { useRouter } from "next/navigation";
-
+import Image from 'next/image';
 
 function getFirstId(searchResults: MovieSearchResponse): string | undefined {
     if (searchResults.results.length > 0) {
@@ -138,7 +138,7 @@ export default function SetMetadataPage({
                     {resultDisplay && (
                         <div>
                             <p>{resultDisplay.overview}</p>
-                            <img src={resultDisplay.posterUrl} alt={resultDisplay.title} />
+                            <Image src={resultDisplay.posterUrl} alt={resultDisplay.title} />
                         </div>
                     )}
                 </form>
