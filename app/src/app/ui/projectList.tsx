@@ -23,6 +23,23 @@ export default function ProjectList({ projects }: { projects: ProjectListRespons
             router.push('/'); // Redirect to the home page
         }
     };
+
+    const handlePublishClick = async (project: string) => {
+        if (!window.confirm(`Are you sure you want to publish the project "${project}"?`)) {
+            return
+        }
+        const response = await fetch(`/projects/${project}/publish`, {
+            method: 'POST',
+        })
+        const data = await response.json();
+        if (!response.ok) {
+            alert(data.error || 'An unexpected error occurred.');
+        }
+        else {
+            router.push('/'); // Redirect to the home page
+        }
+    }
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8">
             <h1 className="text-2xl font-bold mb-4">Project List</h1>
@@ -42,6 +59,9 @@ export default function ProjectList({ projects }: { projects: ProjectListRespons
                             </Link>
                             <button onClick={async () => {handleAbandonClick(name)}} className="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
                                 Abandon
+                            </button>
+                            <button onClick={async () => {handlePublishClick(name)}} className="mt-1 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                Publish
                             </button>
                         </div>
                     </li>
