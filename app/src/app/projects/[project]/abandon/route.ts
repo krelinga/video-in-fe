@@ -2,7 +2,7 @@ import createClient from '@/app/lib/client';
 import { ConnectError } from '@connectrpc/connect';
 import { NextResponse } from 'next/server';
 
-export async function POST(request: Request, { params }: { params: { project: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ project: string }> }) {
     const { project } = await params;
     try {
         const client = createClient();

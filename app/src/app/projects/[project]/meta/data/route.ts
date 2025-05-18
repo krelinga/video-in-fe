@@ -2,8 +2,8 @@ import createClient from '@/app/lib/client';
 import { NextResponse } from 'next/server';
 import { ConnectError } from '@connectrpc/connect';
 
-export async function GET(request: Request, { params }: { params: { project: string } }) {
-    const project = params.project;
+export async function GET(request: Request, { params }: { params: Promise<{ project: string }> }) {
+    const { project } = await params;
 
     try {
         const client = createClient();
@@ -22,9 +22,9 @@ export async function GET(request: Request, { params }: { params: { project: str
     }
 }
 
-export async function POST(request: Request, { params }: { params: { project: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ project: string }> }) {
     const data = await request.formData();
-    const project = params.project;
+    const { project } = await params;
 
     try {
         const client = createClient();

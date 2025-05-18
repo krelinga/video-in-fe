@@ -17,13 +17,13 @@ export async function GET() {
     }
 }
 
-export async function POST(req: Request, { params }: { params: { project: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ project: string }> }) {
     const data = await req.formData();
+    const { project } = await params;
     const discs = Array<string>();
     for (const [key] of data.entries()) {
         discs.push(key);
     }
-    const project = params.project;
 
     try {
         const client = createClient();

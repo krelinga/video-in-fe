@@ -2,10 +2,11 @@ import createClient from '@/app/lib/client';
 import { ConnectError } from '@connectrpc/connect';
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request, { params }: { params: { project: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ project: string }> }) {
+    const { project } = await params;
     try {
         const client = createClient();
-        const reply = await client.projectGet({project: params.project});
+        const reply = await client.projectGet({project: project});
         return NextResponse.json(reply);
     }
     catch (err) {
@@ -17,8 +18,9 @@ export async function GET(req: Request, { params }: { params: { project: string 
     }
 }
 
-export async function POST(req: Request, { params }: { params: { project: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ project: string }> }) {
     const data = await req.formData();
+    const { project } = await params;
     const files = Array<{disc: string, file: string, category: string}>();
     for (const [key, value] of data.entries()) {
         const [keyDisc, keyFile] = key.split('/', 2);
@@ -28,7 +30,6 @@ export async function POST(req: Request, { params }: { params: { project: string
             category: value.toString(),
         });
     }
-    const project = params.project;
 
     try {
         const client = createClient();
