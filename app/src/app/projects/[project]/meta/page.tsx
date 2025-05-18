@@ -138,7 +138,7 @@ export default function SetMetadataPage({
                     {resultDisplay && (
                         <div>
                             <p>{resultDisplay.overview}</p>
-                            <Image src={resultDisplay.posterUrl} alt={resultDisplay.title} />
+                            <Image src={resultDisplay.posterUrl} alt={resultDisplay.title} unoptimized />
                         </div>
                     )}
                 </form>
