@@ -4,7 +4,7 @@ import { createConnectTransport } from "@connectrpc/connect-web"; // Ensure you 
 
 export default function createClient() {
   const transport = createConnectTransport({
-    baseUrl: "http://host.docker.internal:25004", // Replace with your server URL
+    baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL!, // Replace with your server URL
     // Add any additional transport options here
   });
 
