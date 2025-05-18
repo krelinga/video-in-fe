@@ -3,13 +3,25 @@
 import { ProjectListResponse } from '@buf/krelinga_proto.bufbuild_es/krelinga/video/in/v1/service_pb'
 import Link from 'next/link'
 import React from 'react';
+import { useRouter } from "next/navigation";
 
 export default function ProjectList({ projects }: { projects: ProjectListResponse }) {
+    const router = useRouter(); // Initialize the router
+    
     const handleAbandonClick = async (project: string) => {
         if (!window.confirm(`Are you sure you want to abandon the project "${project}"?`)) {
             return
         }
-        console.log(`Abandoning project: ${project}`);
+        const response = await fetch(`/projects/${project}/abandon`, {
+            method: 'POST',
+        })
+        const data = await response.json();
+        if (!response.ok) {
+            alert(data.error || 'An unexpected error occurred.');
+        }
+        else {
+            router.push('/'); // Redirect to the home page
+        }
     };
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8">
