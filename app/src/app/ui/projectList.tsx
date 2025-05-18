@@ -6,7 +6,14 @@ import React from 'react';
 
 export default function ProjectList({ projects }: { projects: ProjectListResponse }) {
     const handleAbandonClick = async (project: string) => {
-        console.log('Abandon button clicked', project);
+        if (window.confirm(`Are you sure you want to abandon the project "${project}"?`)) {
+            // User confirmed, handle abandon logic here
+            // e.g., call API to abandon project
+            console.log(`Project "${project}" abandoned.`);
+        } else {
+            // User cancelled
+            console.log('Abandon cancelled.');
+        }
     };
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8">
