@@ -57,6 +57,9 @@ export default function FileCategorize({ project, imgUrlPrefix }: { project: str
                     {item.discFiles.map((discFile) => (
                         <div key={discFile.file} className="mb-4 border p-4 rounded shadow-md">
                             <div className="text-800 font-medium">File: {discFile.file}</div>
+                            <div className="text-600">Size: {discFile.humanSize}</div>
+                            <div className="text-600">Duration: {discFile.humanDuration}</div>
+                            <div className="text-600">Chapters: {discFile.numChapters}</div>
                             <label className="block mt-2">
                                 <span className="text-600">Category:</span>
                                 <select 
