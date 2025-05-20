@@ -53,12 +53,12 @@ export default function FileCategorize({ project, imgUrlPrefix }: { project: str
             {data && data.map((item) => (
                 <div key={item.disc} className="border p-4 rounded shadow-md">
                     <h2 className="text-xl font-semibold mb-2">Disc: {item.disc}</h2>
-                    <div className="text-gray-700 mb-4">Thumb State: {item.thumbState}</div>
+                    <div className="text-700 mb-4">Thumb State: {item.thumbState}</div>
                     {item.discFiles.map((discFile) => (
                         <div key={discFile.file} className="mb-4">
-                            <div className="text-gray-800 font-medium">File: {discFile.file}</div>
+                            <div className="text-800 font-medium">File: {discFile.file}</div>
                             <label className="block mt-2">
-                                <span className="text-gray-600">Category:</span>
+                                <span className="text-600">Category:</span>
                                 <select 
                                     id={`${item.disc}/${discFile.file}`} 
                                     name={`${item.disc}/${discFile.file}`} 
