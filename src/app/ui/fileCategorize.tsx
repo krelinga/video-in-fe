@@ -75,6 +75,8 @@ export default function FileCategorize({ project, imgUrlPrefix }: { project: str
                                 src={`${imgUrlPrefix}/thumbs/${project}/${item.disc}/${discFile.thumb}`} 
                                 alt="Thumbnail" 
                                 className="mt-4 w-32 h-32 object-cover border rounded"
+                                width={300}
+                                height={300}
                                 unoptimized
                             />
                         </div>
