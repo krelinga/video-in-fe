@@ -1,0 +1,38 @@
+name: test
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload screenshots
+        if: always()  # Always upload screenshots even if tests fail
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-screenshots
+          path: tests/e2e/screenshots
+          if-no-files-found: warn
