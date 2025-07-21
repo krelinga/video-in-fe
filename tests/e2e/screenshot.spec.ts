@@ -98,7 +98,7 @@ test.describe('video-in-fe E2E Tests', () => {
   });
 
   const screenshotTest = (name: string, urlSuffix: string, screenshotSuffix?: string) => {
-    test(name, async ({ page }) => {
+    test(`should load the ${name} and take a screenshot`, async ({ page }) => {
       // Navigate to the specified URL
       const url = frontendUrl + urlSuffix;
       await page.goto(url);
@@ -124,18 +124,18 @@ test.describe('video-in-fe E2E Tests', () => {
   }
 
   screenshotTest(
-    'should load the homepage and take a screenshot',
+    'homepage',
     '',
     '/homepage.png'
   );
 
   screenshotTest(
-    'should load the new projectpage and take a screenshot',
+    'new project page',
     '/new-project'
   );
 
   screenshotTest(
-    'should load the "Categorize" page of the "Name With Spaces" and take a screenshot',
+    'categorize page of the "Name With Spaces" project',
     '/projects/Name%20With%20Spaces'
   );
 });
