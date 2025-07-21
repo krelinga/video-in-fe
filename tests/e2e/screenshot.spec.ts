@@ -75,7 +75,7 @@ test.describe('video-in-fe E2E Tests', () => {
     
     // Give the containers a moment to fully start up
     await new Promise(resolve => setTimeout(resolve, 5000));
-  }, 300000); // 5 minute timeout for container setup
+  });
 
   test.afterAll(async () => {
     console.log('Stopping containers...');
