@@ -97,7 +97,7 @@ test.describe('video-in-fe E2E Tests', () => {
     }
   });
 
-  const screenshotTest = (name: string, urlSuffix: string, screenshotPath: string) => {
+  const screenshotTest = (name: string, urlSuffix: string, screenshotSuffix?: string) => {
     test(name, async ({ page }) => {
       // Navigate to the specified URL
       const url = frontendUrl + urlSuffix;
@@ -107,6 +107,10 @@ test.describe('video-in-fe E2E Tests', () => {
       await page.waitForLoadState('networkidle');
       
       // Take a screenshot
+      if (screenshotSuffix === undefined) {
+        screenshotSuffix = urlSuffix + '.png';
+      }
+      const screenshotPath = 'tests/e2e/screenshots' + screenshotSuffix;
       await page.screenshot({
         path: screenshotPath,
         fullPage: true
@@ -122,18 +126,16 @@ test.describe('video-in-fe E2E Tests', () => {
   screenshotTest(
     'should load the homepage and take a screenshot',
     '',
-    'tests/e2e/screenshots/homepage.png'
+    '/homepage.png'
   );
 
   screenshotTest(
     'should load the new projectpage and take a screenshot',
-    '/new-project',
-    'tests/e2e/screenshots/new-project.png'
+    '/new-project'
   );
 
   screenshotTest(
     'should load the "Categorize" page of the "Name With Spaces" and take a screenshot',
-    '/projects/Name%20With%20Spaces',
-    'tests/e2e/screenshots/projects/Name%20With%20Spaces.png'
+    '/projects/Name%20With%20Spaces'
   );
 });
