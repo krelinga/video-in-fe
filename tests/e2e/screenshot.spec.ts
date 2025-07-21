@@ -97,60 +97,43 @@ test.describe('video-in-fe E2E Tests', () => {
     }
   });
 
-  test('should load the homepage and take a screenshot', async ({ page }) => {
-    // Navigate to the frontend
-    await page.goto(frontendUrl);
-    
-    // Wait for the page to be fully loaded
-    await page.waitForLoadState('networkidle');
-    
-    // Take a screenshot
-    await page.screenshot({ 
-      path: 'tests/e2e/screenshots/homepage.png',
-      fullPage: true 
-    });
-    
-    // Basic assertion that the page loaded
-    await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
-    
-    console.log('Screenshot saved to tests/e2e/screenshots/homepage.png');
-  });
+  const screenshotTest = (name: string, urlSuffix: string, screenshotPath: string) => {
+    test(name, async ({ page }) => {
+      // Navigate to the specified URL
+      const url = frontendUrl + urlSuffix;
+      await page.goto(url);
+      
+      // Wait for the page to be fully loaded
+      await page.waitForLoadState('networkidle');
+      
+      // Take a screenshot
+      await page.screenshot({
+        path: screenshotPath,
+        fullPage: true
+      });
 
-  test('should load the new project page and take a screenshot', async ({ page }) => {
-    // Navigate to the frontend
-    await page.goto(frontendUrl + "/new-project");
-    
-    // Wait for the page to be fully loaded
-    await page.waitForLoadState('networkidle');
-    
-    // Take a screenshot
-    await page.screenshot({ 
-      path: 'tests/e2e/screenshots/new-project.png',
-      fullPage: true 
-    });
-    
-    // Basic assertion that the page loaded
-    await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
-    
-    console.log('Screenshot saved to tests/e2e/screenshots/new-project.png');
-  });
+      // Basic assertion that the page loaded
+      await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
 
-  test('should load the "Categorize" page of the "Name With Spaces" project and take a screenshot', async ({ page }) => {
-    // Navigate to the frontend
-    await page.goto(frontendUrl + "/projects/Name%20With%20Spaces");
-    
-    // Wait for the page to be fully loaded
-    await page.waitForLoadState('networkidle');
-    
-    // Take a screenshot
-    await page.screenshot({ 
-      path: 'tests/e2e/screenshots/projects/Name%20With%20Spaces.png',
-      fullPage: true 
+      console.log(`Screenshot saved to ${screenshotPath}`);
     });
-    
-    // Basic assertion that the page loaded
-    await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
-    
-    console.log('Screenshot saved to tests/e2e/screenshots/projects/Name%20With%20Spaces.png');
-  });
+  }
+
+  screenshotTest(
+    'should load the homepage and take a screenshot',
+    '',
+    'tests/e2e/screenshots/homepage.png'
+  );
+
+  screenshotTest(
+    'should load the new projectpage and take a screenshot',
+    '/new-project',
+    'tests/e2e/screenshots/new-project.png'
+  );
+
+  screenshotTest(
+    'should load the "Categorize" page of the "Name With Spaces" and take a screenshot',
+    '/projects/Name%20With%20Spaces',
+    'tests/e2e/screenshots/projects/Name%20With%20Spaces.png'
+  );
 });
