@@ -11,8 +11,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Opt out of parallel tests to prevent running multiple test containers at once. */
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Set timeout for the entire test suite to accommodate container setup */
@@ -35,8 +35,31 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'global_setup',
+      testMatch: /global\.setup\.ts/,
+      teardown: 'global_teardown',
+    },
+    {
+      name: 'global_teardown',
+      testMatch: /global\.teardown\.ts/,
+    },
+    {
+      name: 'desktop_chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['global_setup'],
+    },
+    {
+      name: 'desktop_safari',
+      use: { browserName: 'webkit' },
+      dependencies: ['global_setup'],
+    },
+    {
+      name: 'mobile_safari',
+      use: {
+        browserName: 'webkit',
+        ...devices['iPhone 15 Plus'],
+      },
+      dependencies: ['global_setup'],
     },
   ],
 
