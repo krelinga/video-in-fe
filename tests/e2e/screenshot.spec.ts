@@ -115,4 +115,42 @@ test.describe('video-in-fe E2E Tests', () => {
     
     console.log('Screenshot saved to tests/e2e/screenshots/homepage.png');
   });
+
+  test('should load the new project page and take a screenshot', async ({ page }) => {
+    // Navigate to the frontend
+    await page.goto(frontendUrl + "/new-project");
+    
+    // Wait for the page to be fully loaded
+    await page.waitForLoadState('networkidle');
+    
+    // Take a screenshot
+    await page.screenshot({ 
+      path: 'tests/e2e/screenshots/new-project.png',
+      fullPage: true 
+    });
+    
+    // Basic assertion that the page loaded
+    await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
+    
+    console.log('Screenshot saved to tests/e2e/screenshots/new-project.png');
+  });
+
+  test('should load the "Categorize" page of the "Name With Spaces" project and take a screenshot', async ({ page }) => {
+    // Navigate to the frontend
+    await page.goto(frontendUrl + "/projects/Name%20With%20Spaces");
+    
+    // Wait for the page to be fully loaded
+    await page.waitForLoadState('networkidle');
+    
+    // Take a screenshot
+    await page.screenshot({ 
+      path: 'tests/e2e/screenshots/projects/Name%20With%20Spaces.png',
+      fullPage: true 
+    });
+    
+    // Basic assertion that the page loaded
+    await expect(page).toHaveTitle(/.*/, { timeout: 10000 });
+    
+    console.log('Screenshot saved to tests/e2e/screenshots/projects/Name%20With%20Spaces.png');
+  });
 });
