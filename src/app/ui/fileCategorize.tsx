@@ -47,7 +47,7 @@ export default function FileCategorize({ project, imgUrlPrefix }: { project: str
 
     return (
         <main>
-            <h1 className="text-2xl font-bold mb-4">Project: {project}</h1>
+            <h1 className="text-2xl font-bold mb-4">Project: {decodeURIComponent(project)}</h1>
             {error && <div className="text-red-500 mb-4">Error: {error}</div>}
             <form onSubmit={onSubmit} className="space-y-6">
             {data && data.map((item) => (
