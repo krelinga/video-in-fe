@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import { GenericContainer, StartedTestContainer, Network, StartedNetwork } from 'testcontainers';
-import path from 'path';
 
 test.describe('video-in-fe E2E Tests', () => {
   let backendContainer: StartedTestContainer;
@@ -39,17 +38,9 @@ test.describe('video-in-fe E2E Tests', () => {
     
     console.log(`Backend running at: ${backendUrl}`);
     
-    // Build the frontend Docker image
-    console.log('Building frontend container...');
-    const frontendImage = await GenericContainer.fromDockerfile(
-      path.resolve(__dirname, '../../'),
-      'Dockerfile'
-    ).build('video-in-fe-test');
-    
     console.log('Starting frontend container...');
-    
     // Start the frontend container with environment variables
-    frontendContainer = await frontendImage
+    frontendContainer = await new GenericContainer('video-in-fe-test')
       .withEnvironment({
         'NEXT_PUBLIC_BACKEND_URL': backendUrl,
         'NEXT_PUBLIC_IMG_URL_PREFIX': imgUrlPrefix
