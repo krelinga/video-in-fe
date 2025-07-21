@@ -27,6 +27,9 @@ export default defineConfig({
     
     /* Capture screenshot on failure */
     screenshot: 'only-on-failure',
+    
+    /* Configure browser to use dark mode */
+    colorScheme: 'dark',
   },
 
   /* Configure projects for major browsers */
