@@ -13,6 +13,13 @@
 # testing
 /coverage
 
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+# Keep screenshots for visual regression
+!tests/e2e/screenshots/
+
 # next.js
 /.next/
 /out/
