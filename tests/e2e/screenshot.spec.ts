@@ -51,6 +51,27 @@ test.describe('video-in-fe E2E Tests', () => {
   }, 300000); // 5 minute timeout for container setup
 
   test.afterAll(async () => {
+    // Capture and print frontend container logs before stopping
+    if (frontendContainer) {
+      try {
+        const logStream = await frontendContainer.logs();
+        const logChunks: Buffer[] = [];
+        await new Promise<void>((resolve, reject) => {
+          logStream
+            .on('data', (chunk: Buffer) => logChunks.push(chunk))
+            .on('end', resolve)
+            .on('error', reject);
+        });
+        const logs = Buffer.concat(logChunks).toString('utf-8');
+        const fs = await import('fs/promises');
+        await fs.writeFile('tests/e2e/frontend-container.log', logs);
+        console.log('--- Frontend Container Logs ---');
+        console.log(logs);
+        console.log('--- End Frontend Container Logs ---');
+      } catch (err) {
+        console.error('Failed to capture frontend container logs:', err);
+      }
+    }
     console.log('Stopping containers...');
     if (frontendContainer) {
       await frontendContainer.stop();
