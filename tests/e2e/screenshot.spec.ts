@@ -98,7 +98,7 @@ test.describe('video-in-fe E2E Tests', () => {
   });
 
   const screenshotTest = (name: string, urlSuffix: string, screenshotSuffix?: string) => {
-    test(`should load the ${name} and take a screenshot`, async ({ page }) => {
+    test(`should load the ${name} and take a screenshot`, async ({ page }, testInfo) => {
       // Navigate to the specified URL
       const url = frontendUrl + urlSuffix;
       await page.goto(url);
@@ -110,7 +110,7 @@ test.describe('video-in-fe E2E Tests', () => {
       if (screenshotSuffix === undefined) {
         screenshotSuffix = urlSuffix + '.png';
       }
-      const screenshotPath = 'tests/e2e/screenshots' + screenshotSuffix;
+      const screenshotPath = 'tests/e2e/' + testInfo.project.name + '/screenshots' + screenshotSuffix;
       await page.screenshot({
         path: screenshotPath,
         fullPage: true
