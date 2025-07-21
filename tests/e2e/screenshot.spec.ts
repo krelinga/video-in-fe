@@ -18,7 +18,7 @@ test.describe('video-in-fe E2E Tests', () => {
     console.log('Starting backend container...');
     
     // Start the backend container on the custom network
-    backendContainer = await new GenericContainer('krelinga/video-in-be-stub:latest')
+    backendContainer = await new GenericContainer('krelinga/video-in-be-stub:v0.2')
       .withExposedPorts(8080)
       .withNetworkMode(network.getName())
       .withName('backend')
