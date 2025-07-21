@@ -40,7 +40,7 @@ test.describe('video-in-fe E2E Tests', () => {
     
     console.log('Starting frontend container...');
     // Start the frontend container with environment variables
-    frontendContainer = await new GenericContainer('video-in-fe-test')
+    frontendContainer = await new GenericContainer(process.env.VIDEO_IN_FE_IMAGE!)
       .withEnvironment({
         'NEXT_PUBLIC_BACKEND_URL': backendUrl,
         'NEXT_PUBLIC_IMG_URL_PREFIX': imgUrlPrefix
