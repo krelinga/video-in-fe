@@ -19,6 +19,8 @@
 /blob-report/
 # Keep screenshots for visual regression
 !tests/e2e/screenshots/
+# Don't keep logs from end-to-end tests
+/tests/e2e/*.log
 
 # next.js
 /.next/
