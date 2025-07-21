@@ -1,21 +1,27 @@
 import { test, expect } from '@playwright/test';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer, StartedTestContainer, Network, StartedNetwork } from 'testcontainers';
 import path from 'path';
 
 test.describe('video-in-fe E2E Tests', () => {
   let backendContainer: StartedTestContainer;
   let frontendContainer: StartedTestContainer;
+  let network: StartedNetwork;
   let frontendUrl: string;
   const backendLogs: string[] = [];
   const frontendLogs: string[] = [];
 
 
   test.beforeAll(async () => {
+    // Create a custom Docker network
+    network = await new Network().start();
+
     console.log('Starting backend container...');
     
-    // Start the backend container (video-in-be-stub)
+    // Start the backend container on the custom network
     backendContainer = await new GenericContainer('krelinga/video-in-be-stub:latest')
       .withExposedPorts(8080)
+      .withNetworkMode(network.getName())
+      .withName('backend')
       .withLogConsumer(stream => {
         stream.on('data', (chunk: Buffer) => {
           const log = chunk.toString('utf-8');
@@ -27,10 +33,9 @@ test.describe('video-in-fe E2E Tests', () => {
       })
       .start();
     
-    const backendHost = backendContainer.getHost();
-    const backendPort = backendContainer.getMappedPort(8080);
-    const backendUrl = `http://${backendHost}:${backendPort}`;
-    const imgUrlPrefix = `http://${backendHost}`;
+    // Use the backend container name as the hostname
+    const backendUrl = `http://backend:8080`;
+    const imgUrlPrefix = `http://backend`;
     
     console.log(`Backend running at: ${backendUrl}`);
     
@@ -50,6 +55,7 @@ test.describe('video-in-fe E2E Tests', () => {
         'NEXT_PUBLIC_IMG_URL_PREFIX': imgUrlPrefix
       })
       .withExposedPorts(3000)
+      .withNetworkMode(network.getName())
       .withLogConsumer(stream => {
         stream.on('data', (chunk: Buffer) => {
           const log = chunk.toString('utf-8');
@@ -85,6 +91,9 @@ test.describe('video-in-fe E2E Tests', () => {
       console.log('--- Backend Container Logs ---');
       console.log(backendLogs.join(''));
       console.log('--- End Backend Container Logs ---');
+    }
+    if (network) {
+      await network.stop();
     }
   });
 
