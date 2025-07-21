@@ -3,18 +3,24 @@ import { ConnectError } from '@connectrpc/connect';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
+    let status = 200;
+    let response;
     try {
         const client = createClient();
         const reply = await client.unclaimedDiscDirList({});
-        return NextResponse.json(reply);
+        response = NextResponse.json(reply);
     }
     catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            console.log(err);
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        console.log(err);
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] GET /projects/[project]/claim/data status=${status}`);
+    return response;
 }
 
 export async function POST(req: Request, { params }: { params: Promise<{ project: string }> }) {
@@ -24,17 +30,22 @@ export async function POST(req: Request, { params }: { params: Promise<{ project
     for (const [key] of data.entries()) {
         discs.push(key);
     }
-
+    let status = 200;
+    let response;
     try {
         const client = createClient();
         await client.projectAssignDiskDirs({ project: project, dirs: discs });
-        return NextResponse.json({ success: true });
+        response = NextResponse.json({ success: true });
     }
     catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            console.log(err);
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        console.log(err);
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] POST /projects/[project]/claim/data status=${status}`);
+    return response;
 }

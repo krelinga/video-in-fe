@@ -5,15 +5,20 @@ import { ConnectError } from '@connectrpc/connect';
 export async function POST(req: NextRequest) {
   const data = await req.formData();
   const name = data.get('name') as string;
-
+  let status = 200;
+  let response;
   try {
     const client = createClient();
     await client.projectNew({ name: name });
-    return NextResponse.json({ success: true });
+    response = NextResponse.json({ success: true });
   } catch (err) {
+    status = 400;
     if (err instanceof ConnectError) {
-      return NextResponse.json({ error: err.message }, { status: 400 });
+      response = NextResponse.json({ error: err.message }, { status });
+    } else {
+      response = NextResponse.json({ error: "Unknown error" }, { status });
     }
-    return NextResponse.json({ error: "Unknown error" }, { status: 400 });
   }
+  console.log(`[API] POST /new-project/submit status=${status}`);
+  return response;
 }

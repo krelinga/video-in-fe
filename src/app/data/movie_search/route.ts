@@ -5,14 +5,20 @@ import { ConnectError } from '@connectrpc/connect';
 export async function POST(req: Request) {
     const data = await req.formData();
     const partialTitle = data.get('partialTitle') as string;
+    let status = 200;
+    let response;
     try {
         const client = createClient();
         const reply = await client.movieSearch({ partialTitle: partialTitle });
-        return NextResponse.json(reply);
+        response = NextResponse.json(reply);
     } catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] POST /data/movie_search status=${status}`);
+    return response;
 }

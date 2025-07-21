@@ -4,18 +4,24 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req: Request, { params }: { params: Promise<{ project: string }> }) {
     const { project } = await params;
+    let status = 200;
+    let response;
     try {
         const client = createClient();
         const reply = await client.projectGet({project: project});
-        return NextResponse.json(reply);
+        response = NextResponse.json(reply);
     }
     catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            console.log(err);
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        console.log(err);
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] GET /projects/[project]/data status=${status}`);
+    return response;
 }
 
 export async function POST(req: Request, { params }: { params: Promise<{ project: string }> }) {
@@ -30,17 +36,22 @@ export async function POST(req: Request, { params }: { params: Promise<{ project
             category: value.toString(),
         });
     }
-
+    let status = 200;
+    let response;
     try {
         const client = createClient();
         await client.projectCategorizeFiles({ project: project, files: files });
-        return NextResponse.json({ success: true });
+        response = NextResponse.json({ success: true });
     }
     catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            console.log(err);
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        console.log(err);
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] POST /projects/[project]/data status=${status}`);
+    return response;
 }

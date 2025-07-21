@@ -4,38 +4,49 @@ import { ConnectError } from '@connectrpc/connect';
 
 export async function GET(request: Request, { params }: { params: Promise<{ project: string }> }) {
     const { project } = await params;
-
+    let status = 200;
+    let response;
     try {
         const client = createClient();
-        const response = await client.projectGet({ project: project });
-        if (response.searchResult) {
-            return NextResponse.json({results: [response.searchResult]});
+        const apiResponse = await client.projectGet({ project: project });
+        if (apiResponse.searchResult) {
+            response = NextResponse.json({results: [apiResponse.searchResult]});
+        } else {
+            response = NextResponse.json({ results: [] });
         }
-        return NextResponse.json({ results: [] });
     }
     catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            console.log(err);
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        console.log(err);
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] GET /projects/[project]/meta/data status=${status}`);
+    return response;
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ project: string }> }) {
     const data = await request.formData();
     const { project } = await params;
-
+    let status = 200;
+    let response;
     try {
         const client = createClient();
         await client.projectSetMetadata({ project: project, id: data.get('tmdbId')?.toString() });
-        return NextResponse.json({ success: true });
+        response = NextResponse.json({ success: true });
     }
     catch (err) {
+        status = 400;
         if (err instanceof ConnectError) {
-            return NextResponse.json({ error: err.message }, { status: 400 });
+            response = NextResponse.json({ error: err.message }, { status });
+        } else {
+            console.log(err);
+            response = NextResponse.json({ error: "Unknown error" }, { status });
         }
-        console.log(err);
-        return NextResponse.json({ error: "Unknown error" }, { status: 400 });
     }
+    console.log(`[API] POST /projects/[project]/meta/data status=${status}`);
+    return response;
 }
