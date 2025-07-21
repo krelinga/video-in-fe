@@ -81,6 +81,28 @@ test.describe('video-in-fe E2E Tests', () => {
         console.error('Failed to capture frontend container logs:', err);
       }
     }
+
+    // Now capture and print backend container logs
+    if (backendContainer) {
+      try {
+        const logStream = await backendContainer.logs();
+        const logChunks: Buffer[] = [];
+        await new Promise<void>((resolve, reject) => {
+          logStream
+            .on('data', (chunk: Buffer) => logChunks.push(chunk))
+            .on('end', resolve)
+            .on('error', reject);
+        });
+        const logs = Buffer.concat(logChunks).toString('utf-8');
+        const fs = await import('fs/promises');
+        await fs.writeFile('tests/e2e/backend-container.log', logs);
+        console.log('--- Backend Container Logs ---');
+        console.log(logs);
+        console.log('--- End Backend Container Logs ---');
+      } catch (err) {
+        console.error('Failed to capture backend container logs:', err);
+      }
+    }
   });
 
   test('should load the homepage and take a screenshot', async ({ page }) => {
