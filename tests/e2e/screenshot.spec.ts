@@ -6,6 +6,9 @@ test.describe('video-in-fe E2E Tests', () => {
   let backendContainer: StartedTestContainer;
   let frontendContainer: StartedTestContainer;
   let frontendUrl: string;
+  const backendLogs: string[] = [];
+  const frontendLogs: string[] = [];
+
 
   test.beforeAll(async () => {
     console.log('Starting backend container...');
@@ -13,6 +16,15 @@ test.describe('video-in-fe E2E Tests', () => {
     // Start the backend container (video-in-be-stub)
     backendContainer = await new GenericContainer('krelinga/video-in-be-stub:latest')
       .withExposedPorts(8080)
+      .withLogConsumer(stream => {
+        stream.on('data', (chunk: Buffer) => {
+          const log = chunk.toString('utf-8');
+          backendLogs.push(log);
+        });
+        stream.on('error', (err: Error) => {
+          console.error('Error in backend log stream:', err);
+        });
+      })
       .start();
     
     const backendHost = backendContainer.getHost();
@@ -38,6 +50,15 @@ test.describe('video-in-fe E2E Tests', () => {
         'NEXT_PUBLIC_IMG_URL_PREFIX': imgUrlPrefix
       })
       .withExposedPorts(3000)
+      .withLogConsumer(stream => {
+        stream.on('data', (chunk: Buffer) => {
+          const log = chunk.toString('utf-8');
+          frontendLogs.push(log);
+        });
+        stream.on('error', (err: Error) => {
+          console.error('Error in frontend log stream:', err);
+        });
+      })
       .start();
     
     const frontendHost = frontendContainer.getHost();
@@ -55,53 +76,15 @@ test.describe('video-in-fe E2E Tests', () => {
     // Stop containers first, then capture logs to avoid hanging
     if (frontendContainer) {
       await frontendContainer.stop();
+      console.log('--- Frontend Container Logs ---');
+      console.log(frontendLogs.join(''));
+      console.log('--- End Frontend Container Logs ---');
     }
     if (backendContainer) {
       await backendContainer.stop();
-    }
-
-    // Now capture and print frontend container logs
-    if (frontendContainer) {
-      try {
-        const logStream = await frontendContainer.logs();
-        const logChunks: Buffer[] = [];
-        await new Promise<void>((resolve, reject) => {
-          logStream
-            .on('data', (chunk: Buffer) => logChunks.push(chunk))
-            .on('end', resolve)
-            .on('error', reject);
-        });
-        const logs = Buffer.concat(logChunks).toString('utf-8');
-        const fs = await import('fs/promises');
-        await fs.writeFile('tests/e2e/frontend-container.log', logs);
-        console.log('--- Frontend Container Logs ---');
-        console.log(logs);
-        console.log('--- End Frontend Container Logs ---');
-      } catch (err) {
-        console.error('Failed to capture frontend container logs:', err);
-      }
-    }
-
-    // Now capture and print backend container logs
-    if (backendContainer) {
-      try {
-        const logStream = await backendContainer.logs();
-        const logChunks: Buffer[] = [];
-        await new Promise<void>((resolve, reject) => {
-          logStream
-            .on('data', (chunk: Buffer) => logChunks.push(chunk))
-            .on('end', resolve)
-            .on('error', reject);
-        });
-        const logs = Buffer.concat(logChunks).toString('utf-8');
-        const fs = await import('fs/promises');
-        await fs.writeFile('tests/e2e/backend-container.log', logs);
-        console.log('--- Backend Container Logs ---');
-        console.log(logs);
-        console.log('--- End Backend Container Logs ---');
-      } catch (err) {
-        console.error('Failed to capture backend container logs:', err);
-      }
+      console.log('--- Backend Container Logs ---');
+      console.log(backendLogs.join(''));
+      console.log('--- End Backend Container Logs ---');
     }
   });
 
