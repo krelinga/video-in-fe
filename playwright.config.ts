@@ -35,12 +35,23 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'global_setup',
+      testMatch: /global\.setup\.ts/,
+      teardown: 'global_teardown',
+    },
+    {
+      name: 'global_teardown',
+      testMatch: /global\.teardown\.ts/,
+    },
+    {
       name: 'desktop_chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies: ['global_setup'],
     },
     {
       name: 'desktop_safari',
       use: { browserName: 'webkit' },
+      dependencies: ['global_setup'],
     },
     {
       name: 'mobile_safari',
@@ -48,6 +59,7 @@ export default defineConfig({
         browserName: 'webkit',
         ...devices['iPhone 15 Plus'],
       },
+      dependencies: ['global_setup'],
     },
   ],
 
