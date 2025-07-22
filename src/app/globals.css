@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --select-bg: #ffffff;
+  --select-text: #374151;
+  --select-border: rgb(209 213 219);
 }
 
 @theme inline {
@@ -16,6 +19,9 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --select-bg: #374151;
+    --select-text: #f3f4f6;
+    --select-border: #6b7280;
   }
 }
 
