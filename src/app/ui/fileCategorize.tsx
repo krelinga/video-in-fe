@@ -66,7 +66,7 @@ export default function FileCategorize({ project, imgUrlPrefix }: { project: str
                                     id={`${item.disc}/${discFile.file}`} 
                                     name={`${item.disc}/${discFile.file}`} 
                                     defaultValue={discFile.category}
-                                    className="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                    className="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 dark:border-gray-600"
                                 >
                                     <option value=""></option>
                                     <option value="main_title">Main Title</option>
