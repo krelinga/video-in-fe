@@ -1,0 +1,33 @@
+{
+    # Disable automatic HTTPS for easier local testing
+    auto_https off
+}
+
+:80 {
+    # Set the root directory for serving files
+    root * /usr/share/caddy
+    
+    # Enable gzip compression
+    encode gzip
+    
+    # Serve static files
+    file_server
+    
+    # SPA fallback - serve index.html for all non-existent paths
+    # This is essential for Vue Router in history mode
+    try_files {path} /index.html
+    
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+    }
+    
+    # Cache static assets for better performance
+    @static {
+        path *.css *.js *.ico *.png *.jpg *.jpeg *.gif *.svg *.woff *.woff2
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+}
