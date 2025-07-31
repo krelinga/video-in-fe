@@ -52,6 +52,59 @@ This directory contains a Vue.js application with TypeScript and Vite, created a
 - `npm run lint` - Lint and fix code
 - `npm run format` - Format code with Prettier
 
+## Environment Variables
+
+The application supports passing environment variables from the server to the client using Vite's environment variable system.
+
+### Setup
+
+Environment variables must be prefixed with `VITE_` to be exposed to the client-side code.
+
+#### Development
+
+1. Create a `.env.local` file in the `vue/` directory (you can copy from `.env.example`):
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Set your environment variables:
+   ```env
+   VITE_FOO_VAR=your-development-value
+   ```
+
+3. Or pass them directly when starting the dev server:
+   ```bash
+   VITE_FOO_VAR="your-development-value" npm run dev
+   ```
+
+#### Production (Docker)
+
+Environment variables are passed to the Docker build process and embedded at build time:
+
+1. Using the provided script:
+   ```bash
+   FOO_VAR="your-production-value" bash run-docker.sh
+   ```
+
+2. Using Docker directly:
+   ```bash
+   docker build --build-arg FOO_VAR="your-production-value" -t vue-app:latest .
+   docker run -p 8080:80 vue-app:latest
+   ```
+
+### Usage in Code
+
+Access environment variables in your Vue components:
+
+```typescript
+// In a Vue component
+const fooVar = import.meta.env.VITE_FOO_VAR
+```
+
+### Example
+
+The application includes an `EnvironmentDisplay` component that demonstrates this functionality by showing the value of `VITE_FOO_VAR`.
+
 ## Docker Deployment
 
 The application includes a production-ready Docker setup using Caddy as the web server.

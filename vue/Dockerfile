@@ -14,6 +14,10 @@ RUN npm ci
 # Copy source code
 COPY . .
 
+# Accept build argument for environment variable
+ARG FOO_VAR
+ENV VITE_FOO_VAR=$FOO_VAR
+
 # Build the application
 RUN npm run build
 
