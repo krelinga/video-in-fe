@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import EnvironmentDisplay from './components/EnvironmentDisplay.vue'
 </script>
 
 <template>
@@ -9,6 +10,11 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper lg:flex lg:items-start lg:flex-wrap">
       <HelloWorld msg="You did it!" />
+      
+      <!-- Environment variable display component -->
+      <div class="w-full mt-6">
+        <EnvironmentDisplay />
+      </div>
 
       <nav class="w-full text-xs text-center mt-8 lg:text-left lg:-ml-4 lg:text-base lg:py-4 lg:mt-4">
         <RouterLink to="/" class="inline-block px-4 border-l border-[var(--color-border)] first:border-l-0 router-link-active:text-[var(--color-text)] hover:router-link-active:bg-transparent">Home</RouterLink>

@@ -52,6 +52,66 @@ This directory contains a Vue.js application with TypeScript and Vite, created a
 - `npm run lint` - Lint and fix code
 - `npm run format` - Format code with Prettier
 
+## Environment Variables
+
+The application supports passing environment variables from the server to the client using a runtime configuration approach that allows changing values without rebuilding the Docker image.
+
+### Setup
+
+#### Development
+
+1. Create a `.env.local` file in the `vue/` directory (you can copy from `.env.example`):
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Set your environment variables:
+   ```env
+   VITE_FOO_VAR=your-development-value
+   ```
+
+3. Or pass them directly when starting the dev server:
+   ```bash
+   VITE_FOO_VAR="your-development-value" npm run dev
+   ```
+
+#### Production (Docker)
+
+Environment variables are passed at **runtime** using Docker's `-e` flag, allowing you to change values without rebuilding the image:
+
+1. Using the provided script:
+   ```bash
+   FOO_VAR="your-production-value" bash run-docker.sh
+   ```
+
+2. Using Docker directly:
+   ```bash
+   # Build once
+   docker build -t vue-app:latest .
+   
+   # Run with different environment variables as needed
+   docker run -p 8080:80 -e FOO_VAR="production-value" vue-app:latest
+   docker run -p 8080:80 -e FOO_VAR="staging-value" vue-app:latest
+   ```
+
+### How It Works
+
+- **Development**: Uses Vite's built-in environment variable system with `VITE_` prefix
+- **Production**: Uses an init script that generates a `config.js` file at container startup with runtime environment variables
+
+### Usage in Code
+
+Access environment variables in your Vue components:
+
+```typescript
+// In a Vue component - works in both development and production
+const fooVar = (window as any).config?.FOO_VAR
+```
+
+### Example
+
+The application includes an `EnvironmentDisplay` component that demonstrates this functionality by showing the value of `FOO_VAR`.
+
 ## Docker Deployment
 
 The application includes a production-ready Docker setup using Caddy as the web server.
