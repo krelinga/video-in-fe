@@ -1,6 +1,6 @@
 <script setup lang="ts">
-// Access environment variable from Vite
-const fooVar = import.meta.env.VITE_FOO_VAR
+// Access environment variable from runtime config
+const fooVar = (window as any).config?.FOO_VAR
 </script>
 
 <template>
@@ -12,7 +12,7 @@ const fooVar = import.meta.env.VITE_FOO_VAR
       <span v-else class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">Not set</span>
     </div>
     <p class="text-sm text-gray-600 mt-2">
-      This value comes from the VITE_FOO_VAR environment variable passed from the server.
+      This value comes from the FOO_VAR environment variable passed at runtime.
     </p>
   </div>
 </template>

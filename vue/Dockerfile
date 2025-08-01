@@ -14,11 +14,7 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Accept build argument for environment variable
-ARG FOO_VAR
-ENV VITE_FOO_VAR=$FOO_VAR
-
-# Build the application
+# Build the application without environment variables
 RUN npm run build
 
 # Production stage with Caddy
@@ -30,7 +26,12 @@ COPY --from=builder /app/dist /usr/share/caddy
 # Copy Caddyfile for serving the Vue.js SPA
 COPY Caddyfile /etc/caddy/Caddyfile
 
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Expose port 80
 EXPOSE 80
 
-# Caddy runs as PID 1 by default in the official image
+# Use custom entrypoint to generate config at runtime
+ENTRYPOINT ["/entrypoint.sh"]

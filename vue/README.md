@@ -54,11 +54,9 @@ This directory contains a Vue.js application with TypeScript and Vite, created a
 
 ## Environment Variables
 
-The application supports passing environment variables from the server to the client using Vite's environment variable system.
+The application supports passing environment variables from the server to the client using a runtime configuration approach that allows changing values without rebuilding the Docker image.
 
 ### Setup
-
-Environment variables must be prefixed with `VITE_` to be exposed to the client-side code.
 
 #### Development
 
@@ -79,7 +77,7 @@ Environment variables must be prefixed with `VITE_` to be exposed to the client-
 
 #### Production (Docker)
 
-Environment variables are passed to the Docker build process and embedded at build time:
+Environment variables are passed at **runtime** using Docker's `-e` flag, allowing you to change values without rebuilding the image:
 
 1. Using the provided script:
    ```bash
@@ -88,22 +86,31 @@ Environment variables are passed to the Docker build process and embedded at bui
 
 2. Using Docker directly:
    ```bash
-   docker build --build-arg FOO_VAR="your-production-value" -t vue-app:latest .
-   docker run -p 8080:80 vue-app:latest
+   # Build once
+   docker build -t vue-app:latest .
+   
+   # Run with different environment variables as needed
+   docker run -p 8080:80 -e FOO_VAR="production-value" vue-app:latest
+   docker run -p 8080:80 -e FOO_VAR="staging-value" vue-app:latest
    ```
+
+### How It Works
+
+- **Development**: Uses Vite's built-in environment variable system with `VITE_` prefix
+- **Production**: Uses an init script that generates a `config.js` file at container startup with runtime environment variables
 
 ### Usage in Code
 
 Access environment variables in your Vue components:
 
 ```typescript
-// In a Vue component
-const fooVar = import.meta.env.VITE_FOO_VAR
+// In a Vue component - works in both development and production
+const fooVar = (window as any).config?.FOO_VAR
 ```
 
 ### Example
 
-The application includes an `EnvironmentDisplay` component that demonstrates this functionality by showing the value of `VITE_FOO_VAR`.
+The application includes an `EnvironmentDisplay` component that demonstrates this functionality by showing the value of `FOO_VAR`.
 
 ## Docker Deployment
 
