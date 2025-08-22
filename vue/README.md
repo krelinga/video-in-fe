@@ -32,7 +32,7 @@ This directory contains a Vue.js application with TypeScript and Vite, created a
 
 2. Start the development server:
    ```bash
-   npm run dev -- --host
+   npm run dev
    ```
    The application will be available at http://localhost:5173
 
