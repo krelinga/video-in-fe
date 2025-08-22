@@ -60,19 +60,9 @@ The application supports passing environment variables from the server to the cl
 
 #### Development
 
-1. Create a `.env.local` file in the `vue/` directory (you can copy from `.env.example`):
+Pass them directly when starting the dev server:
    ```bash
-   cp .env.example .env.local
-   ```
-
-2. Set your environment variables:
-   ```env
-   VITE_FOO_VAR=your-development-value
-   ```
-
-3. Or pass them directly when starting the dev server:
-   ```bash
-   VITE_FOO_VAR="your-development-value" npm run dev
+   FOO_VAR="your-development-value" npm run dev
    ```
 
 #### Production (Docker)
@@ -96,8 +86,10 @@ Environment variables are passed at **runtime** using Docker's `-e` flag, allowi
 
 ### How It Works
 
-- **Development**: Uses Vite's built-in environment variable system with `VITE_` prefix
-- **Production**: Uses an init script that generates a `config.js` file at container startup with runtime environment variables
+- **Development**: Uses a script that runs as part of `npm dev` to write a `envVars.js` file under `/public`.
+- **Production**: Uses an init script that generates th `envVars.js` file at container startup with runtime environment variables
+
+In either case, the `index.html` file references `envVars.js`.
 
 ### Usage in Code
 
@@ -105,7 +97,7 @@ Access environment variables in your Vue components:
 
 ```typescript
 // In a Vue component - works in both development and production
-const fooVar = (window as any).config?.FOO_VAR
+const fooVar = window.envVars.FOO_VAR
 ```
 
 ### Example

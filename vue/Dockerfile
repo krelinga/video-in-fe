@@ -28,7 +28,8 @@ COPY Caddyfile /etc/caddy/Caddyfile
 
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY writeEnvVars.sh /writeEnvVars.sh
+RUN chmod +x /entrypoint.sh /writeEnvVars.sh
 
 # Expose port 80
 EXPOSE 80
