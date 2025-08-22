@@ -7,7 +7,7 @@ declare global {
   }
 }
 // Access environment variable from runtime config
-const fooVar = window.envVars.FOO_VAR
+const fooVar = window.envVars?.FOO_VAR
 </script>
 
 <template>

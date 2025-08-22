@@ -97,7 +97,7 @@ Access environment variables in your Vue components:
 
 ```typescript
 // In a Vue component - works in both development and production
-const fooVar = window.envVars.FOO_VAR
+const fooVar = window.envVars?.FOO_VAR
 ```
 
 ### Example
