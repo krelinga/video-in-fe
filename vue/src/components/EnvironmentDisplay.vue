@@ -1,11 +1,4 @@
 <script setup lang="ts">
-// Declare envVars on the Window interface to avoid TS2339 error
-// TODO: where's a better place to put this so that it will be shared globally?
-declare global {
-  interface Window {
-    envVars?: Record<string, string>;
-  }
-}
 // Access environment variable from runtime config
 const fooVar = window.envVars?.FOO_VAR
 </script>
