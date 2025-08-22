@@ -4,7 +4,7 @@ const fooVar = import.meta.env.VITE_FOO_VAR
 </script>
 
 <template>
-  <div class="env-display p-4 border border-gray-300 rounded-lg bg-gray-50">
+  <div class="env-display p-4 border border-gray-300 rounded-lg">
     <h3 class="text-lg font-semibold mb-2">Environment Variable Demo</h3>
     <div class="flex items-center gap-2">
       <span class="font-medium">FOO_VAR:</span>
