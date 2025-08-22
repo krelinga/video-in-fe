@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Access environment variable from runtime config
-const fooVar = (window as any).config?.FOO_VAR
+const fooVar = import.meta.env.VITE_FOO_VAR
 </script>
 
 <template>
